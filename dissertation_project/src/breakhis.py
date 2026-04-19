@@ -116,6 +116,25 @@ def cohort_summary(df: pd.DataFrame) -> pd.DataFrame:
     return summary
 
 
+def sample_per_patient(
+    df: pd.DataFrame,
+    *,
+    per_magnification: int = 1,
+    random_state: int = 42,
+) -> pd.DataFrame:
+    sampled = (
+        df.groupby(["patient_id", "magnification", "label"], group_keys=False)
+        .apply(
+            lambda frame: frame.sample(
+                n=min(len(frame), per_magnification),
+                random_state=random_state,
+            )
+        )
+        .reset_index(drop=True)
+    )
+    return sampled
+
+
 def split_summary(split: BreakHisSplit) -> pd.DataFrame:
     rows = []
     for name, frame in [("train", split.train), ("val", split.val), ("test", split.test)]:
@@ -130,4 +149,3 @@ def split_summary(split: BreakHisSplit) -> pd.DataFrame:
             }
         )
     return pd.DataFrame(rows)
-

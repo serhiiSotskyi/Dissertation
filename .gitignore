@@ -1,5 +1,7 @@
 .DS_Store
 **/.ipynb_checkpoints/
+**/__pycache__/
+**/*.ipynb.layout
 *.pth
 *.pt
 *.ckpt
@@ -15,3 +17,4 @@ outputs/
 dissertation_project/data/
 dissertation_project/outputs/
 dissertation_project/models/
+dissertation_project/outputs_v2/reports/synthetic_pairs_*.csv

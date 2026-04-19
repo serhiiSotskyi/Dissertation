@@ -1,0 +1,6 @@
+item,value
+dataset_rows,569
+dataset_columns,32
+saved_model_path,/Users/sergeysotskiy/Documents/UNI/year 3/Dissertation/dissertation_project/notebook_Wisconsin/model.pt
+saved_scaler_path,/Users/sergeysotskiy/Documents/UNI/year 3/Dissertation/dissertation_project/notebook_Wisconsin/scaler.joblib
+status,frozen_read_only_branch

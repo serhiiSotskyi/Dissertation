@@ -1,0 +1,21 @@
+cell_index,output
+69,"precision    recall  f1-score   support
+
+           0       0.99      0.96      0.97        72
+           1       0.93      0.98      0.95        42
+
+    accuracy                           0.96       114
+   macro avg       0.96      0.97      0.96       114
+weighted avg       0.97      0.96      0.97       114
+
+ROC-AUC: 0.9976851851851851"
+81,"precision    recall  f1-score   support
+
+           0       0.99      0.96      0.97        72
+           1       0.93      0.98      0.95        42
+
+    accuracy                           0.96       114
+   macro avg       0.96      0.97      0.96       114
+weighted avg       0.97      0.96      0.97       114
+
+ROC-AUC: 0.9973544973544974"
