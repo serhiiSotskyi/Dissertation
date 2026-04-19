@@ -27,6 +27,13 @@ For each method, record:
 - Source: standard transfer-learning practice in medical image classification; ResNet18 backbone available locally through torchvision
 - Adaptation note: this is a pragmatic dissertation implementation choice motivated by local compute limits
 
+### Clean corrected BreaKHis training run
+- Method decision: train a clean ResNet18 baseline from scratch on sampled images from the corrected patient-level split and keep the best epoch by validation accuracy
+- What was implemented: augmented and no-augmentation runs on sampled patient-level development subsets, with checkpoint saving for the selected clean model
+- Why it was chosen: provides a genuinely new image-model result that does not rely on the legacy leaked checkpoint, while staying feasible on the local machine
+- Source: standard supervised image-classification training practice with holdout validation model selection
+- Adaptation note: the dataset was sampled per patient and magnification to keep notebook execution bounded and reproducible on the local hardware
+
 ### Frozen Wisconsin branch
 - Method decision: reuse the published Wisconsin notebook and artifacts unchanged
 - What was implemented: read-only integration and documentation only
@@ -43,7 +50,7 @@ For each method, record:
 
 ### Calibration and error analysis
 - Method decision: report calibration and false-negative behavior alongside headline metrics where feasible
-- What was implemented: planned confusion matrices, Brier score, and calibration plots for new image/fusion outputs
+- What was implemented: confusion matrices, Brier score, expected calibration error, ROC curve, magnification-level analysis, and a saved false-negative/false-positive review panel for the corrected BreaKHis model
 - Why it was chosen: supports a more defendable dissertation argument than accuracy alone
 - Source: standard classification evaluation practice and medical-AI safety motivation
 - Adaptation note: use only where model probabilities are available and stable
@@ -54,3 +61,17 @@ For each method, record:
 - Why it was chosen: prevents synthetic same-label fusion results from being interpreted without a baseline for artificially broken correspondence
 - Source: methodological control principle for synthetic experimental designs
 - Adaptation note: this control is central to the dissertation defense because the paired data is manufactured
+
+### Early vs late fusion comparison
+- Method decision: compare concatenated-feature early fusion with probability-level late fusion under the same synthetic pairing conditions
+- What was implemented: repeated-seed evaluation of tabular-only, image-only, early-fusion, and late-fusion logistic baselines on same-label and random controls
+- Why it was chosen: allows the dissertation to discuss whether the apparent multimodal gain comes from richer joint features or simply from ensembling already-strong unimodal signals
+- Source: common multimodal evaluation practice using early- and decision-level fusion baselines
+- Adaptation note: the late-fusion implementation averages probabilities from separate tabular and image logistic models for interpretability and speed
+
+### Joint monomodel vs fusion analysis
+- Method decision: dedicate a notebook to comparing both monomodels against the synthetic fusion results under one consistent frame
+- What was implemented: cross-model comparison table, family-level plots, and defense notes separating defendable claims from exploratory claims
+- Why it was chosen: the dissertation question is comparative, not only descriptive, so the final analysis must explicitly answer what each branch contributes
+- Source: dissertation design requirement and standard comparative experimental reporting
+- Adaptation note: Wisconsin metrics are taken from the frozen published branch, while BreaKHis and fusion metrics come from the rebuilt notebook workflow

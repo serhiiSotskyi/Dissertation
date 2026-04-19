@@ -1,0 +1,6 @@
+claim_type,statement
+Defendable,Patient-level splitting is necessary on BreaKHis because image-level splitting leaks patients across subsets.
+Defendable,The corrected BreaKHis result is lower than the earlier leaked result but substantially more trustworthy.
+Defendable,The Wisconsin branch is a frozen published comparator rather than newly re-optimised work.
+Exploratory only,"Synthetic same-label fusion can improve metrics, but those gains may reflect artificial label alignment rather than genuine multimodal complementarity."
+Exploratory only,Random-pairing controls are essential for interpreting synthetic multimodal experiments.

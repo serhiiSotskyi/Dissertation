@@ -16,22 +16,24 @@ This phase does not build the web app. It prepares the project so the final arti
   - optional MC-dropout uncertainty if exposed later
 
 ## Image Branch
-- Current defendable image branch is the corrected patient-level BreaKHis embedding baseline
+- Current defendable image branch is the corrected patient-level BreaKHis ResNet18 model trained and evaluated through the rebuilt notebook workflow
 - Key reports:
-  - `dissertation_project/outputs_v2/metrics/breakhis_patient_metrics.csv`
+  - `dissertation_project/outputs_v2/metrics/breakhis_patient_level_metrics.csv`
+  - `dissertation_project/outputs_v2/metrics/breakhis_image_level_metrics.csv`
   - `dissertation_project/outputs_v2/figures/breakhis_patient_confusion_matrix.png`
+  - `dissertation_project/outputs_v2/figures/breakhis_patient_roc_curve.png`
   - `dissertation_project/outputs_v2/figures/breakhis_patient_calibration.png`
 - Current artifact logic:
-  - sampled BreaKHis images
-  - frozen ResNet18 embedding extraction
-  - patient-level embedding aggregation
-  - logistic regression prediction
+  - corrected patient-level split
+  - bounded local training run on sampled development subsets
+  - saved clean checkpoint at `dissertation_project/models/breakhis_resnet18_patient_level_clean.pth`
+  - full corrected test-set prediction and patient-level probability aggregation
 
 ## Synthetic Fusion Branch
 - This branch is exploratory only
 - Expected input:
-  - a tabular record
-  - an image-derived embedding record
+  - a tabular Wisconsin record
+  - an image-derived patient embedding record from the corrected BreaKHis branch
 - Expected output:
   - synthetic fusion prediction
   - clear disclaimer that the pairing is artificial and not clinically representative
@@ -43,3 +45,7 @@ This phase does not build the web app. It prepares the project so the final arti
   - tabular-only mode
   - image-only mode
   - optional synthetic fusion demo mode
+- The app should reuse:
+  - `model.pt` and `scaler.joblib` for the Wisconsin branch
+  - `breakhis_resnet18_patient_level_clean.pth` plus the documented preprocessing settings for the image branch
+  - the saved comparison tables and figure manifest for any technical-report view

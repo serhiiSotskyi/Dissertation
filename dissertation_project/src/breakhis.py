@@ -55,6 +55,39 @@ def build_binary_records(dataset_root: str | Path) -> pd.DataFrame:
     return df
 
 
+def random_image_level_split(
+    df: pd.DataFrame,
+    *,
+    train_size: float = 0.7,
+    val_size: float = 0.15,
+    test_size: float = 0.15,
+    random_state: int = 42,
+) -> BreakHisSplit:
+    """Reproduce a naive image-level split for leakage auditing."""
+    total = round(train_size + val_size + test_size, 10)
+    if total != 1.0:
+        raise ValueError("train/val/test sizes must sum to 1.0")
+
+    train_df, temp_df = train_test_split(
+        df,
+        test_size=(1 - train_size),
+        stratify=df["label"],
+        random_state=random_state,
+    )
+    relative_test = test_size / (val_size + test_size)
+    val_df, test_df = train_test_split(
+        temp_df,
+        test_size=relative_test,
+        stratify=temp_df["label"],
+        random_state=random_state,
+    )
+    return BreakHisSplit(
+        train=train_df.reset_index(drop=True),
+        val=val_df.reset_index(drop=True),
+        test=test_df.reset_index(drop=True),
+    )
+
+
 def patient_level_split(
     df: pd.DataFrame,
     *,
@@ -106,6 +139,22 @@ def patient_overlap_report(split: BreakHisSplit) -> dict[str, int]:
     }
 
 
+def patient_overlap_examples(split: BreakHisSplit, limit: int = 10) -> pd.DataFrame:
+    train_patients = set(split.train["patient_id"])
+    val_patients = set(split.val["patient_id"])
+    test_patients = set(split.test["patient_id"])
+    overlaps = {
+        "train_val": sorted(train_patients & val_patients),
+        "train_test": sorted(train_patients & test_patients),
+        "val_test": sorted(val_patients & test_patients),
+    }
+    rows: list[dict[str, str]] = []
+    for overlap_name, patient_ids in overlaps.items():
+        for patient_id in patient_ids[:limit]:
+            rows.append({"overlap": overlap_name, "patient_id": patient_id})
+    return pd.DataFrame(rows)
+
+
 def cohort_summary(df: pd.DataFrame) -> pd.DataFrame:
     summary = (
         df.groupby(["label", "magnification"])
@@ -116,23 +165,45 @@ def cohort_summary(df: pd.DataFrame) -> pd.DataFrame:
     return summary
 
 
+def label_summary(df: pd.DataFrame) -> pd.DataFrame:
+    return (
+        df.groupby("label")
+        .agg(images=("filepath", "count"), patients=("patient_id", "nunique"))
+        .reset_index()
+        .sort_values("label")
+    )
+
+
+def split_label_summary(split: BreakHisSplit) -> pd.DataFrame:
+    rows = []
+    for subset_name, frame in [("train", split.train), ("val", split.val), ("test", split.test)]:
+        for label, label_frame in frame.groupby("label"):
+            rows.append(
+                {
+                    "subset": subset_name,
+                    "label": label,
+                    "images": len(label_frame),
+                    "patients": label_frame["patient_id"].nunique(),
+                }
+            )
+    return pd.DataFrame(rows).sort_values(["subset", "label"]).reset_index(drop=True)
+
+
 def sample_per_patient(
     df: pd.DataFrame,
     *,
     per_magnification: int = 1,
     random_state: int = 42,
 ) -> pd.DataFrame:
-    sampled = (
-        df.groupby(["patient_id", "magnification", "label"], group_keys=False)
-        .apply(
-            lambda frame: frame.sample(
+    sampled_frames: list[pd.DataFrame] = []
+    for _, frame in df.groupby(["patient_id", "magnification"]):
+        sampled_frames.append(
+            frame.sample(
                 n=min(len(frame), per_magnification),
                 random_state=random_state,
             )
         )
-        .reset_index(drop=True)
-    )
-    return sampled
+    return pd.concat(sampled_frames, ignore_index=True)
 
 
 def split_summary(split: BreakHisSplit) -> pd.DataFrame:

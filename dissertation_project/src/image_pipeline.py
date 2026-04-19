@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
+from copy import deepcopy
 from typing import Iterable
 
 import matplotlib.pyplot as plt
@@ -47,30 +48,57 @@ class TrainingArtifacts:
     y_true: list[int]
     y_pred: list[int]
     y_prob: list[float]
+    prediction_frame: pd.DataFrame | None = None
 
 
-def build_transforms(image_size=(224, 224)):
-    train_transform = transforms.Compose(
-        [
-            transforms.Resize(image_size),
-            transforms.RandomHorizontalFlip(),
-            transforms.RandomRotation(10),
-            transforms.ToTensor(),
-            transforms.Normalize(mean=BREAKHIS_MEAN, std=BREAKHIS_STD),
-        ]
-    )
+def build_transforms(
+    image_size=(224, 224),
+    *,
+    normalization: str = "breakhis",
+    augment: bool = True,
+):
+    if normalization == "breakhis":
+        mean, std = BREAKHIS_MEAN, BREAKHIS_STD
+    elif normalization == "imagenet":
+        mean, std = [0.485, 0.456, 0.406], [0.229, 0.224, 0.225]
+    else:
+        raise ValueError("normalization must be 'breakhis' or 'imagenet'")
+
+    train_steps = [transforms.Resize(image_size)]
+    if augment:
+        train_steps.extend(
+            [
+                transforms.RandomHorizontalFlip(),
+                transforms.RandomRotation(10),
+            ]
+        )
+    train_steps.extend([transforms.ToTensor(), transforms.Normalize(mean=mean, std=std)])
+    train_transform = transforms.Compose(train_steps)
     eval_transform = transforms.Compose(
         [
             transforms.Resize(image_size),
             transforms.ToTensor(),
-            transforms.Normalize(mean=BREAKHIS_MEAN, std=BREAKHIS_STD),
+            transforms.Normalize(mean=mean, std=std),
         ]
     )
     return train_transform, eval_transform
 
 
-def create_dataloaders(train_df, val_df, test_df, batch_size=32):
-    train_transform, eval_transform = build_transforms()
+def create_dataloaders(
+    train_df,
+    val_df,
+    test_df,
+    *,
+    batch_size=32,
+    image_size=(224, 224),
+    normalization: str = "breakhis",
+    augment: bool = True,
+):
+    train_transform, eval_transform = build_transforms(
+        image_size=image_size,
+        normalization=normalization,
+        augment=augment,
+    )
     train_dataset = BreakHisDataset(train_df, transform=train_transform)
     val_dataset = BreakHisDataset(val_df, transform=eval_transform)
     test_dataset = BreakHisDataset(test_df, transform=eval_transform)
@@ -157,6 +185,46 @@ def _evaluate(model, loader, criterion, device):
     return loss, acc, all_labels, all_preds, all_probs
 
 
+def predict_dataframe(
+    model: nn.Module,
+    dataframe: pd.DataFrame,
+    *,
+    batch_size: int = 32,
+    device: str | torch.device | None = None,
+    normalization: str = "breakhis",
+) -> pd.DataFrame:
+    device = torch.device(device) if device is not None else resolve_device()
+    _, eval_transform = build_transforms(normalization=normalization, augment=False)
+    dataset = BreakHisDataset(dataframe, transform=eval_transform)
+    loader = DataLoader(dataset, batch_size=batch_size, shuffle=False, num_workers=0)
+    model = model.to(device)
+    model.eval()
+
+    rows: list[dict[str, object]] = []
+    cursor = 0
+    with torch.no_grad():
+        for images, labels in loader:
+            images = images.to(device)
+            outputs = model(images)
+            probs = torch.softmax(outputs, dim=1)[:, 1].cpu().numpy()
+            preds = (probs >= 0.5).astype(int)
+            batch_frame = dataframe.iloc[cursor : cursor + len(images)].reset_index(drop=True)
+            cursor += len(images)
+            for idx in range(len(batch_frame)):
+                rows.append(
+                    {
+                        "filepath": batch_frame.loc[idx, "filepath"],
+                        "patient_id": batch_frame.loc[idx, "patient_id"],
+                        "label": batch_frame.loc[idx, "label"],
+                        "magnification": batch_frame.loc[idx, "magnification"],
+                        "y_true": int(labels[idx].item()),
+                        "y_pred": int(preds[idx]),
+                        "y_prob": float(probs[idx]),
+                    }
+                )
+    return pd.DataFrame(rows)
+
+
 def train_breakhis_baseline(
     train_df: pd.DataFrame,
     val_df: pd.DataFrame,
@@ -169,9 +237,19 @@ def train_breakhis_baseline(
     weights="default",
     device: str | torch.device | None = None,
     freeze_backbone: bool = False,
+    normalization: str = "breakhis",
+    augment: bool = True,
+    save_path: str | Path | None = None,
 ) -> TrainingArtifacts:
     device = torch.device(device) if device is not None else resolve_device()
-    loaders = create_dataloaders(train_df, val_df, test_df, batch_size=batch_size)
+    loaders = create_dataloaders(
+        train_df,
+        val_df,
+        test_df,
+        batch_size=batch_size,
+        normalization=normalization,
+        augment=augment,
+    )
     model = build_resnet18(
         device,
         weights=weights,
@@ -183,6 +261,8 @@ def train_breakhis_baseline(
     optimizer = torch.optim.Adam(trainable_params, lr=learning_rate)
 
     history_rows = []
+    best_val_accuracy = float("-inf")
+    best_state_dict = None
     for epoch in range(1, epochs + 1):
         train_loss, train_acc = _run_epoch(model, loaders["train"], criterion, optimizer, device)
         val_loss, val_acc, _, _, _ = _evaluate(model, loaders["val"], criterion, device)
@@ -195,10 +275,28 @@ def train_breakhis_baseline(
                 "val_accuracy": val_acc,
             }
         )
+        if val_acc > best_val_accuracy:
+            best_val_accuracy = val_acc
+            best_state_dict = deepcopy(model.state_dict())
+
+    if best_state_dict is not None:
+        model.load_state_dict(best_state_dict)
 
     test_loss, test_acc, y_true, y_pred, y_prob = _evaluate(model, loaders["test"], criterion, device)
     metrics = classification_metrics(y_true, y_pred, y_prob)
     metrics["test_loss"] = test_loss
+    metrics["best_val_accuracy"] = best_val_accuracy
+    prediction_frame = predict_dataframe(
+        model,
+        test_df.reset_index(drop=True),
+        batch_size=batch_size,
+        device=device,
+        normalization=normalization,
+    )
+    if save_path is not None:
+        save_path = Path(save_path)
+        save_path.parent.mkdir(parents=True, exist_ok=True)
+        torch.save(model.state_dict(), save_path)
     return TrainingArtifacts(
         model=model,
         history=pd.DataFrame(history_rows),
@@ -206,6 +304,7 @@ def train_breakhis_baseline(
         y_true=y_true,
         y_pred=y_pred,
         y_prob=y_prob,
+        prediction_frame=prediction_frame,
     )
 
 

@@ -1,0 +1,9 @@
+label,magnification,images,patients
+benign,100X,644,24
+benign,200X,623,24
+benign,400X,588,24
+benign,40X,625,24
+malignant,100X,1437,58
+malignant,200X,1390,58
+malignant,400X,1232,58
+malignant,40X,1370,58

@@ -1,0 +1,7 @@
+subset,label,images,patients
+test,benign,625,4
+test,malignant,710,9
+train,benign,1597,17
+train,malignant,3806,40
+val,benign,258,3
+val,malignant,913,9

@@ -47,7 +47,7 @@ def extract_image_embeddings(
     dataset = BreakHisDataset(dataframe, transform=eval_transform)
     loader = DataLoader(dataset, batch_size=batch_size, shuffle=False, num_workers=0)
 
-    model = build_resnet18(device)
+    model = build_resnet18(device, weights=None)
     state_dict = torch.load(state_dict_path, map_location=device)
     model.load_state_dict(state_dict)
     model.eval()
@@ -165,3 +165,61 @@ def run_logistic_fusion_experiment(
     y_pred = (y_prob >= 0.5).astype(int)
     metrics = classification_metrics(y_test, y_pred, y_prob)
     return FusionResult(metrics=metrics, y_true=y_test, y_pred=y_pred, y_prob=y_prob)
+
+
+def run_late_fusion_experiment(
+    feature_frame: pd.DataFrame,
+    *,
+    test_size: float = 0.2,
+    random_state: int = 42,
+) -> FusionResult:
+    y = (feature_frame["tab_label"] == "malignant").astype(int).to_numpy()
+    tabular_cols = [
+        col for col in feature_frame.columns
+        if col.startswith("tab_") and col not in {"tab_label"}
+        and pd.api.types.is_numeric_dtype(feature_frame[col])
+    ]
+    image_cols = [
+        col for col in feature_frame.columns
+        if col.startswith("img_img_emb_")
+        and pd.api.types.is_numeric_dtype(feature_frame[col])
+    ]
+    tabular_X = feature_frame[tabular_cols].to_numpy()
+    image_X = feature_frame[image_cols].to_numpy()
+    indices = np.arange(len(feature_frame))
+    train_idx, test_idx = train_test_split(
+        indices,
+        test_size=test_size,
+        stratify=y,
+        random_state=random_state,
+    )
+    y_train, y_test = y[train_idx], y[test_idx]
+
+    tabular_model = Pipeline(
+        [("scaler", StandardScaler()), ("clf", LogisticRegression(max_iter=1000))]
+    )
+    image_model = Pipeline(
+        [("scaler", StandardScaler()), ("clf", LogisticRegression(max_iter=1000))]
+    )
+    tabular_model.fit(tabular_X[train_idx], y_train)
+    image_model.fit(image_X[train_idx], y_train)
+
+    tabular_prob = tabular_model.predict_proba(tabular_X[test_idx])[:, 1]
+    image_prob = image_model.predict_proba(image_X[test_idx])[:, 1]
+    y_prob = (tabular_prob + image_prob) / 2
+    y_pred = (y_prob >= 0.5).astype(int)
+    metrics = classification_metrics(y_test, y_pred, y_prob)
+    return FusionResult(metrics=metrics, y_true=y_test, y_pred=y_pred, y_prob=y_prob)
+
+
+def summarise_experiment_rows(results_df: pd.DataFrame) -> pd.DataFrame:
+    return (
+        results_df.groupby(["pairing_type", "experiment", "metric"])["value"]
+        .agg(["mean", "std", "min", "max"])
+        .reset_index()
+        .sort_values(["pairing_type", "experiment", "metric"])
+    )
+
+
+def comparison_table(rows: list[dict[str, object]]) -> pd.DataFrame:
+    return pd.DataFrame(rows).sort_values(["family", "model"]).reset_index(drop=True)

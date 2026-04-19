@@ -39,7 +39,7 @@ It is a writing guide, not the final dissertation.
 ## Abstract
 - problem: matched multimodal datasets are scarce
 - approach: preserve tabular model, rebuild image model, test synthetic label-aligned pairing
-- results: summarize unimodal baselines and fusion behavior
+- results: summarize corrected BreaKHis patient-level results, frozen Wisconsin metrics, and synthetic fusion control behavior
 - conclusion: exploratory framework only, not clinical validity
 
 ## 1. Introduction
@@ -114,25 +114,48 @@ It is a writing guide, not the final dissertation.
 - fusion methods
 - artifact packaging for later app transfer
 
+Notebook evidence:
+- `05_breakhis_model_development.ipynb`
+- `06_breakhis_evaluation_and_error_analysis.ipynb`
+- `07_wisconsin_branch_review_and_integration.ipynb`
+- `08_synthetic_pairing_design.ipynb`
+- `09_fusion_experiments.ipynb`
+
 ## 8. Testing Methodology
 - patient leakage checks
 - artifact loading checks
 - pairing integrity checks
 - repeated-seed robustness checks
 
+Notebook evidence:
+- `03_breakhis_split_audit_and_patient_leakage.ipynb`
+- `09_fusion_experiments.ipynb`
+
 ## 9. Results and Evaluation
-- image-only baseline
-- tabular-only baseline
+- corrected BreaKHis image-only baseline
+- frozen Wisconsin tabular-only branch
 - synthetic early fusion
 - synthetic late fusion
 - random pairing control
 - calibration and false-negative analysis where available
+
+Core figures/tables:
+- `outputs_v2/figures/breakhis_patient_confusion_matrix.png`
+- `outputs_v2/figures/breakhis_patient_roc_curve.png`
+- `outputs_v2/figures/breakhis_patient_calibration.png`
+- `outputs_v2/figures/fusion_experiment_comparison.png`
+- `outputs_v2/metrics/breakhis_patient_level_metrics.csv`
+- `outputs_v2/metrics/synthetic_fusion_summary.csv`
 
 ## 10. Discussion
 - interpret what fusion gains mean
 - discuss whether gains may be driven by artificial label alignment
 - compare against methodological expectations from literature
 - highlight limitations strongly
+
+Notebook evidence:
+- `10_model_comparison_and_joint_analysis.ipynb`
+- `11_results_synthesis_and_defense_pack.ipynb`
 
 ## 11. Conclusion
 - summarize findings
@@ -149,3 +172,15 @@ It is a writing guide, not the final dissertation.
 - AI usage declaration
 - additional technical outputs if needed
 
+## Current Notebook Map
+- `01_scope_and_research_questions.ipynb`: dissertation framing, hypotheses, success criteria
+- `02_breakhis_dataset_exploration.ipynb`: cohort audit, sample mosaics, colour and size summaries
+- `03_breakhis_split_audit_and_patient_leakage.ipynb`: leakage proof and corrected split
+- `04_breakhis_preprocessing_and_dataloaders.ipynb`: transform comparison and dataloader smoke tests
+- `05_breakhis_model_development.ipynb`: legacy reference, clean training runs, ablations
+- `06_breakhis_evaluation_and_error_analysis.ipynb`: corrected holdout evaluation and failure analysis
+- `07_wisconsin_branch_review_and_integration.ipynb`: frozen branch review and integration contract
+- `08_synthetic_pairing_design.ipynb`: synthetic pairing construction and control logic
+- `09_fusion_experiments.ipynb`: repeated-seed fusion experiments
+- `10_model_comparison_and_joint_analysis.ipynb`: monomodel vs fusion comparison
+- `11_results_synthesis_and_defense_pack.ipynb`: dissertation-ready summary pack

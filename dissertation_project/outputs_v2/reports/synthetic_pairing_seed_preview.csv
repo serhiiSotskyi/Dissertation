@@ -1,0 +1,11 @@
+seed,pairing_type,match_rate
+11,same_label,1.0
+11,random,0.4288224956063269
+21,same_label,1.0
+21,random,0.43936731107205623
+31,same_label,1.0
+31,random,0.4833040421792619
+41,same_label,1.0
+41,random,0.44112478031634444
+51,same_label,1.0
+51,random,0.4147627416520211

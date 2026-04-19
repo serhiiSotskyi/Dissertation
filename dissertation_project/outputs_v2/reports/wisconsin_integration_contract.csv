@@ -1,0 +1,6 @@
+item,detail
+feature_schema,30 numeric diagnostic features after dropping the CSV export index column.
+label_mapping,"B -> benign, M -> malignant"
+saved_model,/Users/sergeysotskiy/Documents/UNI/year 3/Dissertation/dissertation_project/notebook_Wisconsin/model.pt
+saved_scaler,/Users/sergeysotskiy/Documents/UNI/year 3/Dissertation/dissertation_project/notebook_Wisconsin/scaler.joblib
+uncertainty_method,Monte-Carlo Dropout reported in the frozen notebook

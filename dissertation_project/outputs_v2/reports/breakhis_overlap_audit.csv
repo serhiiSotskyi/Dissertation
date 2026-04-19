@@ -1,0 +1,7 @@
+split_type,subset_pair,overlap_count
+legacy_image_level,train_val_overlap,82
+legacy_image_level,train_test_overlap,82
+legacy_image_level,val_test_overlap,82
+corrected_patient_level,train_val_overlap,0
+corrected_patient_level,train_test_overlap,0
+corrected_patient_level,val_test_overlap,0
