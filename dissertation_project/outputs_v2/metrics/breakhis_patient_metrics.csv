@@ -1,7 +1,0 @@
-model,metric,value
-breakhis_patient_embedding_logreg,accuracy,0.7692307692307693
-breakhis_patient_embedding_logreg,precision,0.875
-breakhis_patient_embedding_logreg,recall,0.7777777777777778
-breakhis_patient_embedding_logreg,f1_score,0.8235294117647058
-breakhis_patient_embedding_logreg,roc_auc,0.9444444444444444
-breakhis_patient_embedding_logreg,brier_score,0.10219765391994527
