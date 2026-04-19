@@ -1,0 +1,17 @@
+.DS_Store
+**/.ipynb_checkpoints/
+*.pth
+*.pt
+*.ckpt
+*.h5
+*.csv
+*.zip
+*.tar
+*.gz
+*.tmp
+~$*
+data/
+outputs/
+dissertation_project/data/
+dissertation_project/outputs/
+dissertation_project/models/
