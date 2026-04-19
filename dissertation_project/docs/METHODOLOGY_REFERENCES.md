@@ -28,11 +28,11 @@ For each method, record:
 - Adaptation note: this is a pragmatic dissertation implementation choice motivated by local compute limits
 
 ### Clean corrected BreaKHis training run
-- Method decision: train a clean ResNet18 baseline from scratch on sampled images from the corrected patient-level split and keep the best epoch by validation accuracy
-- What was implemented: augmented and no-augmentation runs on sampled patient-level development subsets, with checkpoint saving for the selected clean model
-- Why it was chosen: provides a genuinely new image-model result that does not rely on the legacy leaked checkpoint, while staying feasible on the local machine
+- Method decision: train a clean ResNet18 baseline on the full corrected patient-level split and keep the best epoch by validation accuracy
+- What was implemented: a full-split augmented training run with best-checkpoint selection by validation accuracy, followed by corrected full-test evaluation
+- Why it was chosen: provides a genuinely new image-model result that does not rely on the legacy leaked checkpoint and removes the earlier compromise of sampled-only training
 - Source: standard supervised image-classification training practice with holdout validation model selection
-- Adaptation note: the dataset was sampled per patient and magnification to keep notebook execution bounded and reproducible on the local hardware
+- Adaptation note: the run was intentionally stopped once later epochs were clearly degrading validation performance; the selected artifact is the best saved checkpoint, not the last epoch
 
 ### Frozen Wisconsin branch
 - Method decision: reuse the published Wisconsin notebook and artifacts unchanged

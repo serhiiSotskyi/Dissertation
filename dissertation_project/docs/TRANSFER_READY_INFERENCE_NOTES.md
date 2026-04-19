@@ -25,7 +25,7 @@ This phase does not build the web app. It prepares the project so the final arti
   - `dissertation_project/outputs_v2/figures/breakhis_patient_calibration.png`
 - Current artifact logic:
   - corrected patient-level split
-  - bounded local training run on sampled development subsets
+  - full corrected-split training run with best-checkpoint selection by validation accuracy
   - saved clean checkpoint at `dissertation_project/models/breakhis_resnet18_patient_level_clean.pth`
   - full corrected test-set prediction and patient-level probability aggregation
 

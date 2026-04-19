@@ -36,15 +36,15 @@
   - sample mosaics
   - colour summary
 - Audited the old image-level split and proved leakage, then exported corrected patient-level split CSVs.
-- Built preprocessing and sampled development dataloaders on the corrected split.
-- Ran bounded corrected model development:
-  - legacy frozen-feature reference
-  - clean augmented patient-level training run
-  - clean no-augmentation ablation
+- Built preprocessing and dataloaders for the corrected split, then escalated the image branch to a maximum full-split pass.
+- Ran corrected model development on the full patient-level split:
+  - legacy frozen-feature reference on the full corrected split
+  - clean augmented full-split training run with best-checkpoint selection by validation accuracy
 - Saved development outputs including:
   - `breakhis_model_development_runs.csv`
+  - `breakhis_patient_history.csv`
+  - `breakhis_patient_history.png`
   - `breakhis_run_a_history.png`
-  - `breakhis_run_b_history.png`
   - `breakhis_model_development_comparison.png`
 - Evaluated the corrected BreaKHis model on the holdout set and saved:
   - image-level metrics
@@ -65,6 +65,5 @@
   - dissertation-ready comparison figures
 
 ### Pending next actions
-- Update documentation mappings for the final executed notebook sequence
-- Stage and commit the rebuilt notebook workflow plus saved artifacts
-- Push the next major milestone to GitHub
+- Draft the dissertation chapters from the rebuilt notebook and figure pack
+- Add any extra narrative figures if the written dissertation needs more visual support
