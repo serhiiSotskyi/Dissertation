@@ -1,0 +1,53 @@
+# .graphifyignore — patterns to exclude from graphify detection/extraction.
+# Same syntax as .gitignore.
+# Anything matched here is skipped BEFORE token-costing extraction runs.
+
+# ── Large binary corpora (1.7 GB of BreakHis cancer PNGs) ───────────────────
+# Leaving these in would make graphify burn vision tokens on every image.
+data/
+dataset_cancer_v1/
+
+# ── Trained model weights (~129 MB) ────────────────────────────────────────
+models/
+*.pth
+*.pt
+*.ckpt
+*.safetensors
+*.bin
+*.onnx
+
+# ── Generated outputs and intermediate artefacts ───────────────────────────
+outputs/
+outputs_v2/
+graphify-out/
+graph-vault/
+
+# ── Notebook checkpoints and caches ────────────────────────────────────────
+.ipynb_checkpoints/
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# ── Notebook backup files left by prior Codex runs ─────────────────────────
+*.ipynb.bak_codex
+*.ipynb.bak_plan2
+*.bak_*
+
+# ── Jupyter notebooks (graphify has no native .ipynb extractor) ────────────
+# Comment this out if you want nbconvert-based extraction later.
+*.ipynb
+
+# ── Template / boilerplate directories ─────────────────────────────────────
+paper template/
+
+# ── OS / editor cruft ──────────────────────────────────────────────────────
+.DS_Store
+.vscode/
+.idea/
+*.swp
+
+# ── Git internals ──────────────────────────────────────────────────────────
+.git/

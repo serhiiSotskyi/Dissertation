@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from pathlib import Path
 
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from sklearn.calibration import calibration_curve
@@ -54,6 +53,8 @@ def expected_calibration_error(y_true, y_prob, *, n_bins: int = 10) -> float:
 
 
 def save_confusion_matrix(y_true, y_pred, labels, output_path: str | Path, title: str) -> None:
+    import matplotlib.pyplot as plt
+
     output_path = Path(output_path)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     cm = confusion_matrix(y_true, y_pred)
@@ -74,6 +75,8 @@ def save_confusion_matrix(y_true, y_pred, labels, output_path: str | Path, title
 
 
 def save_calibration_plot(y_true, y_prob, output_path: str | Path, title: str) -> None:
+    import matplotlib.pyplot as plt
+
     output_path = Path(output_path)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     prob_true, prob_pred = calibration_curve(y_true, y_prob, n_bins=10)
@@ -90,6 +93,8 @@ def save_calibration_plot(y_true, y_prob, output_path: str | Path, title: str) -
 
 
 def save_roc_curve(y_true, y_prob, output_path: str | Path, title: str) -> None:
+    import matplotlib.pyplot as plt
+
     output_path = Path(output_path)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     fpr, tpr, _ = roc_curve(y_true, y_prob)
@@ -116,6 +121,8 @@ def save_metric_barplot(
     title: str,
     ylabel: str,
 ) -> None:
+    import matplotlib.pyplot as plt
+
     output_path = Path(output_path)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     fig, ax = plt.subplots(figsize=(8, 5))

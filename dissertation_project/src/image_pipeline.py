@@ -1,11 +1,10 @@
 from __future__ import annotations
 
+from copy import deepcopy
 from dataclasses import dataclass
 from pathlib import Path
-from copy import deepcopy
 from typing import Iterable
 
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from PIL import Image
@@ -309,6 +308,8 @@ def train_breakhis_baseline(
 
 
 def save_history_plot(history: pd.DataFrame, output_path: str | Path) -> None:
+    import matplotlib.pyplot as plt
+
     output_path = Path(output_path)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     fig, axes = plt.subplots(1, 2, figsize=(10, 4))
