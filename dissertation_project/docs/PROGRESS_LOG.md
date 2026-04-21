@@ -35,10 +35,10 @@
   - image-size summary
   - sample mosaics
   - colour summary
-- Audited the old image-level split and proved leakage, then exported corrected patient-level split CSVs.
+- Audited the initial image-level split and proved leakage, then exported corrected patient-level split CSVs.
 - Built preprocessing and dataloaders for the corrected split, then escalated the image branch to a maximum full-split pass.
 - Ran corrected model development on the full patient-level split:
-  - legacy frozen-feature reference on the full corrected split
+  - initial frozen-feature comparator on the full corrected split
   - clean augmented full-split training run with best-checkpoint selection by validation accuracy
 - Saved development outputs including:
   - `breakhis_model_development_runs.csv`
@@ -58,11 +58,11 @@
   - image-only
   - early fusion
   - late fusion
-- Built the joint comparison notebook and final defense pack, including:
+- Built the joint comparison notebook and final synthesis notebook, including:
   - `joint_model_comparison.csv`
   - `figure_manifest.csv`
   - `defense_claims.csv`
-  - dissertation-ready comparison figures
+  - comparison figures for the written dissertation
 
 ### Pending next actions
 - Draft the dissertation chapters from the rebuilt notebook and figure pack

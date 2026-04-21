@@ -16,7 +16,7 @@ This phase does not build the web app. It prepares the project so the final arti
   - optional MC-dropout uncertainty if exposed later
 
 ## Image Branch
-- Current defendable image branch is the corrected patient-level BreaKHis ResNet18 model trained and evaluated through the rebuilt notebook workflow
+- Current main image branch is the corrected patient-level BreaKHis ResNet18 model trained and evaluated through the rebuilt notebook workflow
 - Key reports:
   - `dissertation_project/outputs_v2/metrics/breakhis_patient_level_metrics.csv`
   - `dissertation_project/outputs_v2/metrics/breakhis_image_level_metrics.csv`

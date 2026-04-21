@@ -177,10 +177,10 @@ Notebook evidence:
 - `02_breakhis_dataset_exploration.ipynb`: cohort audit, sample mosaics, colour and size summaries
 - `03_breakhis_split_audit_and_patient_leakage.ipynb`: leakage proof and corrected split
 - `04_breakhis_preprocessing_and_dataloaders.ipynb`: transform comparison and dataloader smoke tests
-- `05_breakhis_model_development.ipynb`: legacy reference, clean training runs, ablations
+- `05_breakhis_model_development.ipynb`: initial frozen-feature comparator, clean training runs, ablations
 - `06_breakhis_evaluation_and_error_analysis.ipynb`: corrected holdout evaluation and failure analysis
 - `07_wisconsin_branch_review_and_integration.ipynb`: frozen branch review and integration contract
 - `08_synthetic_pairing_design.ipynb`: synthetic pairing construction and control logic
 - `09_fusion_experiments.ipynb`: repeated-seed fusion experiments
 - `10_model_comparison_and_joint_analysis.ipynb`: monomodel vs fusion comparison
-- `11_results_synthesis_and_defense_pack.ipynb`: dissertation-ready summary pack
+- `11_results_synthesis_and_defense_pack.ipynb`: final synthesis notebook and writing checklist

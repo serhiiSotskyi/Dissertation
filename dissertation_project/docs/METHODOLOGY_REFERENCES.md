@@ -23,14 +23,14 @@ For each method, record:
 ### Lightweight image baseline via frozen ResNet18 embeddings
 - Method decision: use a frozen ImageNet-pretrained ResNet18 backbone to extract embeddings from sampled BreaKHis images, then aggregate to patient level and classify with logistic regression
 - What was implemented: one sampled image per patient per magnification, embedding extraction, patient-level averaging, logistic regression classifier
-- Why it was chosen: substantially cheaper than full fine-tuning on the local machine while still producing a defendable patient-level image baseline
+- Why it was chosen: substantially cheaper than full fine-tuning on the local machine while still producing a usable patient-level image baseline
 - Source: standard transfer-learning practice in medical image classification; ResNet18 backbone available locally through torchvision
 - Adaptation note: this is a pragmatic dissertation implementation choice motivated by local compute limits
 
 ### Clean corrected BreaKHis training run
 - Method decision: train a clean ResNet18 baseline on the full corrected patient-level split and keep the best epoch by validation accuracy
 - What was implemented: a full-split augmented training run with best-checkpoint selection by validation accuracy, followed by corrected full-test evaluation
-- Why it was chosen: provides a genuinely new image-model result that does not rely on the legacy leaked checkpoint and removes the earlier compromise of sampled-only training
+- Why it was chosen: provides a genuinely new image-model result that does not rely on the initial image-level comparator and removes the earlier compromise of sampled-only training
 - Source: standard supervised image-classification training practice with holdout validation model selection
 - Adaptation note: the run was intentionally stopped once later epochs were clearly degrading validation performance; the selected artifact is the best saved checkpoint, not the last epoch
 
@@ -51,7 +51,7 @@ For each method, record:
 ### Calibration and error analysis
 - Method decision: report calibration and false-negative behavior alongside headline metrics where feasible
 - What was implemented: confusion matrices, Brier score, expected calibration error, ROC curve, magnification-level analysis, and a saved false-negative/false-positive review panel for the corrected BreaKHis model
-- Why it was chosen: supports a more defendable dissertation argument than accuracy alone
+- Why it was chosen: supports a stronger dissertation argument than accuracy alone
 - Source: standard classification evaluation practice and medical-AI safety motivation
 - Adaptation note: use only where model probabilities are available and stable
 
@@ -71,7 +71,7 @@ For each method, record:
 
 ### Joint monomodel vs fusion analysis
 - Method decision: dedicate a notebook to comparing both monomodels against the synthetic fusion results under one consistent frame
-- What was implemented: cross-model comparison table, family-level plots, and defense notes separating defendable claims from exploratory claims
+- What was implemented: cross-model comparison table, family-level plots, and synthesis notes separating main results from exploratory claims
 - Why it was chosen: the dissertation question is comparative, not only descriptive, so the final analysis must explicitly answer what each branch contributes
 - Source: dissertation design requirement and standard comparative experimental reporting
 - Adaptation note: Wisconsin metrics are taken from the frozen published branch, while BreaKHis and fusion metrics come from the rebuilt notebook workflow

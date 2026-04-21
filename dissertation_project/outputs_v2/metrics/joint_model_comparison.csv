@@ -1,5 +1,5 @@
 family,model,accuracy,roc_auc,calibration_or_stability,claim_type
-monomodel,BreaKHis corrected patient-level model,0.7692307692307693,0.8888888888888888,ECE=0.235,new defendable image result
+monomodel,BreaKHis corrected patient-level model,0.7692307692307693,0.8888888888888888,ECE=0.235,main new image result
 monomodel,Wisconsin published branch,0.96,0.997,MC Dropout reported in source notebook,published frozen branch
 synthetic_fusion,random | early_fusion,0.9701754385964912,0.9947751322751324,std_acc=0.010,exploratory only
 synthetic_fusion,random | late_fusion,0.9719298245614034,0.9904100529100528,std_acc=0.010,exploratory only
