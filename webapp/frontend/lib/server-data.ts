@@ -1,33 +1,50 @@
 import { readFile, readdir, stat } from "node:fs/promises";
 import path from "node:path";
 
-import { demoDatasetImages, notebooks } from "@/lib/content";
+import { notebooks } from "@/lib/content";
 
 type CsvRecord = Record<string, string>;
+type DemoCaseLabelHint = "benign" | "borderline" | "malignant";
 
 type TabularDemoCase = {
   id: string;
-  labelHint: "benign" | "malignant";
+  labelHint: DemoCaseLabelHint;
   description: string;
   features: Record<string, number>;
+  probabilityMalignant?: number;
+  sourceLabel?: string;
+  sourceUrl?: string;
 };
 
 type ImageDemoCase = {
   id: string;
   imageId: string;
-  labelHint: "benign" | "malignant";
+  labelHint: DemoCaseLabelHint;
   description: string;
+  relativePath: string;
+  patientId?: string;
+  magnification?: string;
+  probabilityMalignant?: number;
+  selectionReason?: string;
 };
 
 type FusionDemoCase = {
   id: string;
   imageId: string;
-  labelHint: "benign" | "malignant";
+  labelHint: DemoCaseLabelHint;
   description: string;
   features: Record<string, number>;
+  tabularPresetId?: string;
+  imagePresetId?: string;
+  caseType?: string;
+  probabilityMalignant?: number;
 };
 
 export type DemoCasesPayload = {
+  schemaVersion?: number;
+  generatedAt?: string;
+  source?: Record<string, string>;
+  disclaimer?: string;
   featureOrder: string[];
   tabular: TabularDemoCase[];
   image: ImageDemoCase[];
@@ -46,6 +63,7 @@ export type LandingMetrics = {
 const repoRoot = path.resolve(process.cwd(), "..", "..");
 const projectRoot = path.join(repoRoot, "dissertation_project");
 const animationsRoot = path.join(repoRoot, "webapp", "animations");
+const demoPresetsPath = path.join(projectRoot, "outputs_v2", "reports", "demo_presets.json");
 
 function splitCsvLine(line: string) {
   return line.split(",").map((entry) => entry.trim());
@@ -102,7 +120,17 @@ function coerceFeatureRow(row: CsvRecord) {
   );
 }
 
+async function readDemoPresetManifest(): Promise<DemoCasesPayload> {
+  return JSON.parse(await readFile(demoPresetsPath, "utf8")) as DemoCasesPayload;
+}
+
 export async function buildLocalDemoCases(): Promise<DemoCasesPayload> {
+  try {
+    return await readDemoPresetManifest();
+  } catch {
+    // Keep the test page usable in partial checkouts where generated reports are absent.
+  }
+
   const rows = await readCsv("notebook_Wisconsin/brca.csv");
   const benignRow = rows.find((row) => row.y === "B") ?? rows[0];
   const malignantRow = rows.find((row) => row.y === "M") ?? rows[rows.length - 1];
@@ -117,38 +145,18 @@ export async function buildLocalDemoCases(): Promise<DemoCasesPayload> {
       {
         id: "tabular-benign-published",
         labelHint: "benign",
-        description: "Frozen Wisconsin sample expected to read as benign in the published branch.",
+        description: "Wisconsin sample expected to read as benign in the tabular model.",
         features: benignFeatures,
       },
       {
         id: "tabular-malignant-published",
         labelHint: "malignant",
-        description: "Frozen Wisconsin sample expected to read as malignant in the published branch.",
+        description: "Wisconsin sample expected to read as malignant in the tabular model.",
         features: malignantFeatures,
       },
     ],
-    image: demoDatasetImages.map((image) => ({
-      id: `image-${image.id}`,
-      imageId: image.id,
-      labelHint: image.labelHint,
-      description: image.description,
-    })),
-    fusion: [
-      {
-        id: "fusion-benign-synthetic",
-        imageId: "benign-100x-001",
-        labelHint: "benign",
-        description: "Synthetic fusion demo using a benign Wisconsin row with a benign pathology tile.",
-        features: benignFeatures,
-      },
-      {
-        id: "fusion-malignant-synthetic",
-        imageId: "malignant-100x-001",
-        labelHint: "malignant",
-        description: "Synthetic fusion demo using a malignant Wisconsin row with a malignant pathology tile.",
-        features: malignantFeatures,
-      },
-    ],
+    image: [],
+    fusion: [],
   };
 }
 
@@ -214,7 +222,8 @@ export async function getNotebookPath(name: string) {
 }
 
 export async function getDatasetImagePath(id: string) {
-  const image = demoDatasetImages.find((entry) => entry.id === id);
+  const demoCases = await buildLocalDemoCases();
+  const image = demoCases.image.find((entry) => entry.imageId === id || entry.id === id);
   if (!image) {
     return null;
   }

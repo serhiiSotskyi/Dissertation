@@ -197,7 +197,7 @@ export function TestWorkbench({
       <header className="topbar">
         <div>
           <span className="eyebrow">Live testing surface</span>
-          <p className="topbar-copy">Code-driven 2D motion, real repo artifacts, and optional local Lottie support.</p>
+          <p className="topbar-copy">Demo page for trying the project models with predefined cases or your own inputs.</p>
         </div>
         <nav className="topbar-nav">
           <Link href="/">Home</Link>
@@ -375,7 +375,6 @@ export function TestWorkbench({
                 exit={{ opacity: 0, y: -18 }}
               >
                 <h3>Choose a mode and run a demo.</h3>
-                <p>The main motion on this page is code-driven. Lottie stays optional and never blocks the workflow.</p>
               </motion.div>
             )}
           </AnimatePresence>

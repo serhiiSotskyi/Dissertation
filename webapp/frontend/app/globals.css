@@ -374,6 +374,10 @@ select {
   min-height: 180px;
 }
 
+.story-grid--single {
+  grid-template-columns: minmax(0, 1fr);
+}
+
 .pinned-sequence {
   margin-top: 24px;
   padding: 36px;

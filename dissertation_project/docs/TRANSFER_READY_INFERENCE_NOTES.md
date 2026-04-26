@@ -3,9 +3,9 @@
 This phase does not build the web app. It prepares the project so the final artifacts can be transferred into an app later without redesigning the inference logic.
 
 ## Tabular Branch
-- Source notebook remains frozen:
+- Source notebook is reused as the published baseline:
   - `dissertation_project/notebook_Wisconsin/BreaScope AI.ipynb`
-- Frozen artifacts:
+- Published artifacts:
   - `dissertation_project/notebook_Wisconsin/model.pt`
   - `dissertation_project/notebook_Wisconsin/scaler.joblib`
 - Expected input:

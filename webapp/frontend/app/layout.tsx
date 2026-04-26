@@ -15,8 +15,8 @@ const mono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "BreaScope AI",
-  description: "A motion-driven dissertation web app for tabular, image, and synthetic-fusion breast cancer inference research.",
+  title: "Project placeholder",
+  description: "Breast cancer classification research with image, tabular, and exploratory fusion testing.",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

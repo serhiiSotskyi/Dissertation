@@ -50,7 +50,29 @@ def load_wisconsin_scaler(scaler_path: str | Path):
 
 @lru_cache(maxsize=4)
 def load_wisconsin_model(model_path: str | Path):
-    model = torch.load(model_path, map_location="cpu")
+    loaded = torch.load(model_path, map_location="cpu")
+    if isinstance(loaded, torch.nn.Module):
+        model = loaded
+    else:
+        model = torch.nn.Sequential(
+            torch.nn.Conv2d(1, 16, kernel_size=3),
+            torch.nn.ReLU(),
+            torch.nn.Dropout(0.3),
+            torch.nn.Flatten(),
+            torch.nn.Linear(16 * 4 * 3, 32),
+            torch.nn.ReLU(),
+            torch.nn.Dropout(0.3),
+            torch.nn.Linear(32, 2),
+        )
+        state_dict = {
+            "0.weight": loaded["conv.0.weight"],
+            "0.bias": loaded["conv.0.bias"],
+            "4.weight": loaded["fc.0.weight"],
+            "4.bias": loaded["fc.0.bias"],
+            "7.weight": loaded["fc.3.weight"],
+            "7.bias": loaded["fc.3.bias"],
+        }
+        model.load_state_dict(state_dict)
     model.eval()
     return model
 

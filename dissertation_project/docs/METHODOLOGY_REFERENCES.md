@@ -34,7 +34,7 @@ For each method, record:
 - Source: standard supervised image-classification training practice with holdout validation model selection
 - Adaptation note: the run was intentionally stopped once later epochs were clearly degrading validation performance; the selected artifact is the best saved checkpoint, not the last epoch
 
-### Frozen Wisconsin branch
+### Published Wisconsin branch
 - Method decision: reuse the published Wisconsin notebook and artifacts unchanged
 - What was implemented: read-only integration and documentation only
 - Why it was chosen: user explicitly required this branch to remain untouched
@@ -74,4 +74,4 @@ For each method, record:
 - What was implemented: cross-model comparison table, family-level plots, and synthesis notes separating main results from exploratory claims
 - Why it was chosen: the dissertation question is comparative, not only descriptive, so the final analysis must explicitly answer what each branch contributes
 - Source: dissertation design requirement and standard comparative experimental reporting
-- Adaptation note: Wisconsin metrics are taken from the frozen published branch, while BreaKHis and fusion metrics come from the rebuilt notebook workflow
+- Adaptation note: Wisconsin metrics are taken from the published Wisconsin branch, while BreaKHis and fusion metrics come from the rebuilt notebook workflow

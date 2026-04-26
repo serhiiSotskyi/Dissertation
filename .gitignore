@@ -32,6 +32,7 @@ graphify-out/
 *.ckpt
 *.h5
 *.csv
+!dissertation_project/outputs_v2/reports/demo_preset_evidence.csv
 *.zip
 *.tar
 *.gz

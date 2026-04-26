@@ -39,7 +39,7 @@ It is a writing guide, not the final dissertation.
 ## Abstract
 - problem: matched multimodal datasets are scarce
 - approach: preserve tabular model, rebuild image model, test synthetic label-aligned pairing
-- results: summarize corrected BreaKHis patient-level results, frozen Wisconsin metrics, and synthetic fusion control behavior
+- results: summarize corrected BreaKHis patient-level results, published Wisconsin metrics, and synthetic fusion control behavior
 - conclusion: exploratory framework only, not clinical validity
 
 ## 1. Introduction
@@ -68,7 +68,7 @@ It is a writing guide, not the final dissertation.
 - do fusion methods outperform controls?
 
 ### 1.7 Proposed solution
-- frozen Wisconsin branch
+- published Wisconsin branch
 - patient-level BreaKHis rebuild
 - same-label and random-pairing synthetic experiments
 
@@ -133,7 +133,7 @@ Notebook evidence:
 
 ## 9. Results and Evaluation
 - corrected BreaKHis image-only baseline
-- frozen Wisconsin tabular-only branch
+- published Wisconsin tabular-only branch
 - synthetic early fusion
 - synthetic late fusion
 - random pairing control
@@ -179,7 +179,7 @@ Notebook evidence:
 - `04_breakhis_preprocessing_and_dataloaders.ipynb`: transform comparison and dataloader smoke tests
 - `05_breakhis_model_development.ipynb`: initial frozen-feature comparator, clean training runs, ablations
 - `06_breakhis_evaluation_and_error_analysis.ipynb`: corrected holdout evaluation and failure analysis
-- `07_wisconsin_branch_review_and_integration.ipynb`: frozen branch review and integration contract
+- `07_wisconsin_branch_review_and_integration.ipynb`: published branch review and integration contract
 - `08_synthetic_pairing_design.ipynb`: synthetic pairing construction and control logic
 - `09_fusion_experiments.ipynb`: repeated-seed fusion experiments
 - `10_model_comparison_and_joint_analysis.ipynb`: monomodel vs fusion comparison

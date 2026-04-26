@@ -95,8 +95,8 @@ export function LandingStory({
 
       <header className="topbar">
         <div>
-          <span className="eyebrow">BreaScope AI</span>
-          <p className="topbar-copy">Cinematic 2D research interface for dissertation-grade inference storytelling.</p>
+          <span className="eyebrow">Project placeholder</span>
+          <p className="topbar-copy">Breast cancer classification research with image, tabular, and exploratory fusion testing.</p>
         </div>
         <nav className="topbar-nav">
           <Link href="/test">Live test</Link>
@@ -107,15 +107,14 @@ export function LandingStory({
       <main className="home-main">
         <section className="hero-panel glass-panel">
           <div className="hero-copy">
-            <span className="hero-kicker hero-line">Leakage-safe image inference.</span>
             <h1 className="hero-title">
-              <span className="hero-line">A motion-first research surface</span>
-              <span className="hero-line">for tabular, pathology,</span>
-              <span className="hero-line">and synthetic fusion demos.</span>
+              <span className="hero-line">A research project on</span>
+              <span className="hero-line">image, tabular, and</span>
+              <span className="hero-line">exploratory fusion testing.</span>
             </h1>
             <p className="hero-line hero-summary">
-              The experience is built around the frozen Wisconsin branch, the corrected patient-level BreaKHis branch,
-              and an explicitly non-clinical synthetic fusion demo.
+              This project brings the main breast cancer classification workflows into one place, with dedicated testing
+              views for image-based analysis, tabular inputs, and exploratory multimodal experiments.
             </p>
             <div className="hero-actions hero-line">
               <Link href="/test" className="button button--primary">
@@ -141,16 +140,16 @@ export function LandingStory({
               <span className="callout-meta">Patient-level ROC AUC</span>
             </div>
             <div className="hero-callout hero-callout--lower glass-panel">
-              <span className="callout-label">Frozen tabular branch</span>
+              <span className="callout-label">Tabular branch</span>
               <MetricCounter className="callout-value" value={metrics.wisconsinAccuracy * 100} suffix="%" />
-              <span className="callout-meta">Published Wisconsin accuracy</span>
+              <span className="callout-meta">Wisconsin benchmark accuracy</span>
             </div>
           </div>
         </section>
 
         <section className="metrics-grid story-strip">
           <motion.article className="metric-card story-card glass-panel" whileHover={{ y: -8 }}>
-            <span className="metric-label">Corrected image accuracy</span>
+            <span className="metric-label">Image accuracy</span>
             <MetricCounter className="metric-value" value={metrics.patientAccuracy * 100} suffix="%" />
           </motion.article>
           <motion.article className="metric-card story-card glass-panel" whileHover={{ y: -8 }}>
@@ -182,33 +181,23 @@ export function LandingStory({
               <article className="sequence-step glass-panel">
                 <span className="sequence-index">02</span>
                 <h3>Tabular-only mode</h3>
-                <p>Run the frozen Wisconsin branch with all 30 morphological features exposed in a structured, transparent form.</p>
+                <p>Use all 30 morphological features in a structured interface designed for transparent tabular testing.</p>
               </article>
               <article className="sequence-step glass-panel">
                 <span className="sequence-index">03</span>
                 <h3>Synthetic fusion demo</h3>
-                <p>The fusion lane remains available for methodology exploration, but the non-clinical disclaimer stays attached to the result at all times.</p>
+                <p>Explore combined image and tabular inputs in an experimental multimodal workflow for comparison and analysis.</p>
               </article>
             </div>
             <LottieSupport className="sequence-support-lottie" name={scannerAnimationName} />
           </div>
         </section>
 
-        <section className="story-grid story-strip">
-          <article className="story-card glass-panel">
-            <span className="eyebrow">Interface principle</span>
-            <h3>Motion as explanation</h3>
-            <p>All major transitions are built in code with 2D layers, masks, counters, and scroll-linked timelines instead of decorative 3D scenes.</p>
-          </article>
+        <section className="story-grid story-grid--single story-strip">
           <article className="story-card glass-panel">
             <span className="eyebrow">Notebook system</span>
             <h3>Curated docs, not raw dumps</h3>
             <p>The notebook page turns the executed research sequence into a browsable reading surface with side navigation, figure cards, and direct notebook downloads.</p>
-          </article>
-          <article className="story-card glass-panel">
-            <span className="eyebrow">Deployment split</span>
-            <h3>Vercel + Railway</h3>
-            <p>Next.js hosts the experience and artifact routes, while the Python API remains ready for Railway-hosted inference using the frozen and corrected model artifacts.</p>
           </article>
         </section>
       </main>

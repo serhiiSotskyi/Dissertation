@@ -26,27 +26,7 @@ WISCONSIN_MODEL_PATH = PROJECT_ROOT / "notebook_Wisconsin" / "model.pt"
 WISCONSIN_SCALER_PATH = PROJECT_ROOT / "notebook_Wisconsin" / "scaler.joblib"
 BREAKHIS_CHECKPOINT_PATH = PROJECT_ROOT / "models" / "breakhis_resnet18_patient_level_clean.pth"
 WISCONSIN_DATA_PATH = PROJECT_ROOT / "notebook_Wisconsin" / "brca.csv"
-
-DEMO_IMAGES = [
-    {
-        "id": "benign-100x-001",
-        "imageId": "benign-100x-001",
-        "labelHint": "benign",
-        "description": "Benign BreaKHis sample at 100X magnification.",
-    },
-    {
-        "id": "malignant-100x-001",
-        "imageId": "malignant-100x-001",
-        "labelHint": "malignant",
-        "description": "Malignant BreaKHis sample at 100X magnification.",
-    },
-    {
-        "id": "malignant-100x-002",
-        "imageId": "malignant-100x-002",
-        "labelHint": "malignant",
-        "description": "Alternative malignant BreaKHis sample for a second demo run.",
-    },
-]
+DEMO_PRESETS_PATH = PROJECT_ROOT / "outputs_v2" / "reports" / "demo_presets.json"
 
 STANDARD_DISCLAIMER = (
     "Research demo only. This interface is not a clinical decision support system and must not be used for diagnosis."
@@ -58,6 +38,12 @@ SYNTHETIC_DISCLAIMER = (
 
 class TabularRequest(BaseModel):
     features: dict[str, float]
+
+
+def load_demo_presets():
+    if not DEMO_PRESETS_PATH.is_file():
+        return None
+    return json.loads(DEMO_PRESETS_PATH.read_text())
 
 
 def load_demo_rows():
@@ -80,6 +66,10 @@ def load_demo_rows():
 
 
 def build_demo_cases():
+    demo_presets = load_demo_presets()
+    if demo_presets is not None:
+        return demo_presets
+
     demo_rows = load_demo_rows()
     benign_features = demo_rows["benign_features"]
     malignant_features = demo_rows["malignant_features"]
@@ -89,33 +79,18 @@ def build_demo_cases():
             {
                 "id": "tabular-benign-published",
                 "labelHint": "benign",
-                "description": "Frozen Wisconsin sample expected to read as benign in the published branch.",
+                "description": "Published Wisconsin sample expected to read as benign in the tabular branch.",
                 "features": benign_features,
             },
             {
                 "id": "tabular-malignant-published",
                 "labelHint": "malignant",
-                "description": "Frozen Wisconsin sample expected to read as malignant in the published branch.",
+                "description": "Published Wisconsin sample expected to read as malignant in the tabular branch.",
                 "features": malignant_features,
             },
         ],
-        "image": DEMO_IMAGES,
-        "fusion": [
-            {
-                "id": "fusion-benign-synthetic",
-                "imageId": "benign-100x-001",
-                "labelHint": "benign",
-                "description": "Synthetic fusion demo using a benign Wisconsin row with a benign pathology tile.",
-                "features": benign_features,
-            },
-            {
-                "id": "fusion-malignant-synthetic",
-                "imageId": "malignant-100x-001",
-                "labelHint": "malignant",
-                "description": "Synthetic fusion demo using a malignant Wisconsin row with a malignant pathology tile.",
-                "features": malignant_features,
-            },
-        ],
+        "image": [],
+        "fusion": [],
     }
 
 
@@ -141,7 +116,8 @@ def build_response(
 
 
 def ensure_feature_order(features: dict[str, float]):
-    feature_order = load_demo_rows()["feature_order"]
+    demo_presets = load_demo_presets()
+    feature_order = demo_presets["featureOrder"] if demo_presets is not None else load_demo_rows()["feature_order"]
     missing = [feature for feature in feature_order if feature not in features]
     if missing:
         raise HTTPException(status_code=422, detail=f"Missing tabular features: {', '.join(missing)}")

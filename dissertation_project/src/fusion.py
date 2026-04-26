@@ -17,7 +17,7 @@ from .image_pipeline import BreakHisDataset, build_resnet18, build_transforms, r
 from .metrics import classification_metrics
 
 
-def load_frozen_wisconsin_dataframe(path: str | Path) -> pd.DataFrame:
+def load_wisconsin_dataframe(path: str | Path) -> pd.DataFrame:
     df = pd.read_csv(path).rename(columns={"y": "label"})
     df["label"] = df["label"].map({"B": "benign", "M": "malignant"})
     if "Unnamed: 0" in df.columns:

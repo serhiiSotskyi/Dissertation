@@ -51,7 +51,7 @@
   - patient-level metrics
   - magnification-level metrics
   - ROC, calibration, confusion-matrix, and error-panel figures
-- Exported Wisconsin review artifacts and an integration contract without modifying the frozen branch.
+- Exported Wisconsin review artifacts and an integration contract without modifying the published branch.
 - Ran synthetic same-label and random-pairing analyses with repeated seeds.
 - Saved repeated-seed fusion outputs for:
   - tabular-only

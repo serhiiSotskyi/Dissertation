@@ -3,11 +3,11 @@
 ## Working Scope
 This project rebuilds the dissertation around a synthetic multimodal pairing study using:
 
-- frozen Wisconsin tabular branch in `dissertation_project/notebook_Wisconsin/`
+- published Wisconsin tabular branch in `dissertation_project/notebook_Wisconsin/`
 - rebuilt BreaKHis image branch under `dissertation_project/notebooks_v2/`
 - exploratory synthetic fusion between independent datasets
 
-## Frozen Components
+## Protected Components
 Do not edit:
 
 - `dissertation_project/notebook_Wisconsin/BreaScope AI.ipynb`
@@ -24,4 +24,3 @@ Do not edit:
 
 ## Core Claim
 The dissertation does not claim clinical multimodal validity. It evaluates whether synthetic label-aligned pairing of independent unimodal datasets can act as a useful exploratory framework for testing multimodal fusion strategies under data scarcity.
-

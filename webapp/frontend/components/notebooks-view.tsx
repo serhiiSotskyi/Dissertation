@@ -5,24 +5,18 @@ import Link from "next/link";
 import { motion } from "motion/react";
 import { useEffect, useState } from "react";
 
-import { LottieSupport } from "@/components/lottie-support";
-import type { LottieSearchGroup, NotebookDefinition } from "@/lib/content";
+import type { NotebookDefinition } from "@/lib/content";
 
 type NotebooksViewProps = {
   notebooks: NotebookDefinition[];
-  lottieSearchGroups: LottieSearchGroup[];
-  lottieStyleFilters: string[];
-  supportAnimationName: string | null;
 };
 
 export function NotebooksView({
   notebooks,
-  lottieSearchGroups,
-  lottieStyleFilters,
-  supportAnimationName,
 }: NotebooksViewProps) {
   const [activeSlug, setActiveSlug] = useState(notebooks[0]?.slug ?? "");
   const [progress, setProgress] = useState(0);
+  const activeNotebook = notebooks.find((notebook) => notebook.slug === activeSlug) ?? notebooks[0];
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -140,7 +134,7 @@ export function NotebooksView({
                 </div>
               ) : (
                 <div className="empty-figure-card glass-panel glass-panel--nested">
-                  <p>This notebook is mainly structural or integration-focused, so the web surface links directly to the raw notebook rather than forcing filler charts.</p>
+                  <p>{notebook.emptyStateNote ?? "This section is presented primarily through the source notebook, so the page links directly to the raw notebook instead of adding placeholder figures."}</p>
                 </div>
               )}
             </motion.article>
@@ -148,35 +142,28 @@ export function NotebooksView({
         </section>
 
         <aside className="support-rail glass-panel">
-          <div className="support-hero">
-            <span className="eyebrow">Optional support Lottie</span>
-            <LottieSupport className="support-lottie" name={supportAnimationName} />
-            <p>Support animations stay local-first and decorative. The main motion system remains code-driven and 2D.</p>
+          <div className="support-card glass-panel glass-panel--nested">
+            <span className="eyebrow">Reading guide</span>
+            <h3>{activeNotebook?.title ?? "Notebook overview"}</h3>
+            <p>Use the left column to move through the notebook sequence. Each section keeps the short summary, the purpose, the main findings, and the raw notebook download together.</p>
           </div>
 
           <div className="support-card glass-panel glass-panel--nested">
-            <span className="eyebrow">Search pack</span>
-            {lottieSearchGroups.map((group) => (
-              <div key={group.title} className="search-group">
-                <h3>{group.title}</h3>
-                {group.requests.map((request) => (
-                  <code key={request} className="search-request">
-                    {request}
-                  </code>
-                ))}
+            <span className="eyebrow">Current section</span>
+            <dl className="result-meta">
+              <div>
+                <dt>Notebook file</dt>
+                <dd>{activeNotebook?.filename ?? "-"}</dd>
               </div>
-            ))}
-          </div>
-
-          <div className="support-card glass-panel glass-panel--nested">
-            <span className="eyebrow">Style filters</span>
-            <div className="filter-chip-grid">
-              {lottieStyleFilters.map((filter) => (
-                <span key={filter} className="filter-chip">
-                  {filter}
-                </span>
-              ))}
-            </div>
+              <div>
+                <dt>Figures shown</dt>
+                <dd>{activeNotebook?.figures.length ?? 0}</dd>
+              </div>
+              <div>
+                <dt>Key findings</dt>
+                <dd>{activeNotebook?.findings.length ?? 0}</dd>
+              </div>
+            </dl>
           </div>
         </aside>
       </main>
