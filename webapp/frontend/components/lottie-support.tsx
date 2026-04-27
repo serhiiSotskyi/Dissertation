@@ -12,6 +12,10 @@ type LottieSupportProps = {
   loop?: boolean;
 };
 
+function animationSrc(name: string) {
+  return `/animations/${encodeURIComponent(name)}`;
+}
+
 export function LottieSupport({
   name,
   className,
@@ -30,7 +34,7 @@ export function LottieSupport({
 
     let cancelled = false;
 
-    fetch(`/api/animations?name=${encodeURIComponent(name)}`)
+    fetch(animationSrc(name))
       .then(async (response) => {
         if (!response.ok) {
           throw new Error("Animation unavailable");
@@ -57,7 +61,7 @@ export function LottieSupport({
     return null;
   }
 
-  const src = `/api/animations?name=${encodeURIComponent(name)}`;
+  const src = animationSrc(name);
   if (name.toLowerCase().endsWith(".lottie")) {
     return <DotLottieReact className={className} src={src} loop={loop} autoplay />;
   }

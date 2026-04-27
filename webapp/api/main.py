@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 import sys
 import time
 from pathlib import Path
@@ -22,11 +23,40 @@ from src.inference import (  # noqa: E402
     infer_wisconsin,
 )
 
-WISCONSIN_MODEL_PATH = PROJECT_ROOT / "notebook_Wisconsin" / "model.pt"
-WISCONSIN_SCALER_PATH = PROJECT_ROOT / "notebook_Wisconsin" / "scaler.joblib"
-BREAKHIS_CHECKPOINT_PATH = PROJECT_ROOT / "models" / "breakhis_resnet18_patient_level_clean.pth"
-WISCONSIN_DATA_PATH = PROJECT_ROOT / "notebook_Wisconsin" / "brca.csv"
-DEMO_PRESETS_PATH = PROJECT_ROOT / "outputs_v2" / "reports" / "demo_presets.json"
+
+def resolve_path(env_name: str, fallback: Path) -> Path:
+    configured = os.getenv(env_name)
+    if configured:
+        return Path(configured).expanduser().resolve()
+    return fallback
+
+
+def get_allowed_origins() -> list[str]:
+    configured = os.getenv("CORS_ALLOW_ORIGINS", "*")
+    origins = [origin.strip() for origin in configured.split(",") if origin.strip()]
+    return origins or ["*"]
+
+
+WISCONSIN_MODEL_PATH = resolve_path(
+    "WISCONSIN_MODEL_PATH",
+    PROJECT_ROOT / "notebook_Wisconsin" / "model.pt",
+)
+WISCONSIN_SCALER_PATH = resolve_path(
+    "WISCONSIN_SCALER_PATH",
+    PROJECT_ROOT / "notebook_Wisconsin" / "scaler.joblib",
+)
+BREAKHIS_CHECKPOINT_PATH = resolve_path(
+    "BREAKHIS_CHECKPOINT_PATH",
+    PROJECT_ROOT / "models" / "breakhis_resnet18_patient_level_clean.pth",
+)
+WISCONSIN_DATA_PATH = resolve_path(
+    "WISCONSIN_DATA_PATH",
+    PROJECT_ROOT / "notebook_Wisconsin" / "brca.csv",
+)
+DEMO_PRESETS_PATH = resolve_path(
+    "DEMO_PRESETS_PATH",
+    PROJECT_ROOT / "outputs_v2" / "reports" / "demo_presets.json",
+)
 
 STANDARD_DISCLAIMER = (
     "Research demo only. This interface is not a clinical decision support system and must not be used for diagnosis."
@@ -124,11 +154,13 @@ def ensure_feature_order(features: dict[str, float]):
     return pd.DataFrame([{feature: features[feature] for feature in feature_order}])
 
 
+allowed_origins = get_allowed_origins()
+
 app = FastAPI(title="BreaScope AI API", version="1.0.0")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
+    allow_origins=allowed_origins,
+    allow_credentials="*" not in allowed_origins,
     allow_methods=["*"],
     allow_headers=["*"],
 )

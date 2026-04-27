@@ -34,6 +34,29 @@ npm run dev
 
 ## Notes
 
-- The frontend reads figures and notebooks directly from `dissertation_project/` through local route handlers.
-- Predefined image demos come from committed BreaKHis sample images already present in the repo.
+- The frontend serves deployment-safe figures, notebooks, animations, and sample images from `frontend/public/`.
+- Regenerate public frontend assets with `cd webapp/frontend && npm run prepare:assets` after updating dissertation outputs.
 - The synthetic fusion route is always framed as exploratory and non-clinical.
+
+## Deployment
+
+Deploy this as two services:
+
+1. **Frontend: Vercel**
+   - Project root: `webapp/frontend`
+   - Framework preset: Next.js
+   - Build command: `npm run build`
+   - Output: Vercel detects the Next.js `.next` output automatically
+   - Environment variable:
+     - `API_BASE_URL=https://<your-railway-api-domain>`
+
+2. **Inference API: Railway**
+   - Project root/build context: repository root
+   - Dockerfile path: `webapp/api/Dockerfile`
+   - Healthcheck path: `/health`
+   - Environment variables:
+     - `RAILWAY_DOCKERFILE_PATH=webapp/api/Dockerfile`
+     - `CORS_ALLOW_ORIGINS=https://<your-vercel-domain>`
+     - `BREAKHIS_CHECKPOINT_PATH=/app/dissertation_project/models/breakhis_resnet18_patient_level_clean.pth`
+
+The API Docker build intentionally excludes the raw BreaKHis dataset. It copies only the Python service, inference code, tabular artifacts, demo preset manifest, and the clean BreaKHis checkpoint. With the Dockerfile as written, `dissertation_project/models/breakhis_resnet18_patient_level_clean.pth` must be present in the Docker build context. Local Docker/Railway uploads can use the existing local file; Git-based deploys should provide it through Git LFS or another tracked private build artifact.
