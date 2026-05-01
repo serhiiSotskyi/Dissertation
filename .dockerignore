@@ -9,7 +9,6 @@
 graphify-out/
 .virtual_documents/
 anaconda_projects/
-diss req/
 ~$*
 *.docx
 
@@ -21,9 +20,8 @@ diss req/
 **/.env.*.local
 
 dissertation_project/data/
-dissertation_project/outputs/
-dissertation_project/notebooks_v2/
-dissertation_project/outputs_v2/**
-!dissertation_project/outputs_v2/
-!dissertation_project/outputs_v2/reports/
-!dissertation_project/outputs_v2/reports/demo_presets.json
+dissertation_project/notebooks/
+dissertation_project/outputs/**
+!dissertation_project/outputs/
+!dissertation_project/outputs/reports/
+!dissertation_project/outputs/reports/demo_presets.json

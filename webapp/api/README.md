@@ -30,7 +30,7 @@ Production environment variables:
 
 ```bash
 RAILWAY_DOCKERFILE_PATH=webapp/api/Dockerfile
-CORS_ALLOW_ORIGINS=https://<your-vercel-domain>
+CORS_ALLOW_ORIGINS=https://dissertation-nu.vercel.app
 BREAKHIS_CHECKPOINT_PATH=/app/dissertation_project/models/breakhis_resnet18_patient_level_clean.pth
 ```
 

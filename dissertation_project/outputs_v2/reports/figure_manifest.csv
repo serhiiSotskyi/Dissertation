@@ -1,9 +1,0 @@
-figure_path,suggested_use
-/Users/sergeysotskiy/Documents/UNI/year 3/Dissertation/dissertation_project/outputs_v2/figures/breakhis_sample_mosaic.png,Dataset chapter or exploratory analysis section
-/Users/sergeysotskiy/Documents/UNI/year 3/Dissertation/dissertation_project/outputs_v2/figures/breakhis_leakage_audit.png,Methods chapter to justify patient-level splitting
-/Users/sergeysotskiy/Documents/UNI/year 3/Dissertation/dissertation_project/outputs_v2/figures/breakhis_model_development_comparison.png,Model development section
-/Users/sergeysotskiy/Documents/UNI/year 3/Dissertation/dissertation_project/outputs_v2/figures/breakhis_patient_confusion_matrix.png,Results chapter
-/Users/sergeysotskiy/Documents/UNI/year 3/Dissertation/dissertation_project/outputs_v2/figures/breakhis_patient_roc_curve.png,Results chapter
-/Users/sergeysotskiy/Documents/UNI/year 3/Dissertation/dissertation_project/outputs_v2/figures/breakhis_patient_calibration.png,Results or discussion chapter
-/Users/sergeysotskiy/Documents/UNI/year 3/Dissertation/dissertation_project/outputs_v2/figures/fusion_experiment_comparison.png,Exploratory fusion section
-/Users/sergeysotskiy/Documents/UNI/year 3/Dissertation/dissertation_project/outputs_v2/figures/joint_model_accuracy_comparison.png,Comparison/discussion chapter

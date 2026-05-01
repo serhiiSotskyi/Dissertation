@@ -10,12 +10,12 @@ const publicRoot = path.join(frontendRoot, "public");
 
 const paths = {
   animationsSource: path.join(repoRoot, "webapp", "animations"),
-  figuresSource: path.join(projectRoot, "outputs_v2", "figures"),
-  notebooksSource: path.join(projectRoot, "notebooks_v2"),
-  demoPresetsSource: path.join(projectRoot, "outputs_v2", "reports", "demo_presets.json"),
-  patientMetricsSource: path.join(projectRoot, "outputs_v2", "metrics", "breakhis_patient_level_metrics.csv"),
-  jointMetricsSource: path.join(projectRoot, "outputs_v2", "metrics", "joint_model_comparison.csv"),
-  syntheticMetricsSource: path.join(projectRoot, "outputs_v2", "metrics", "synthetic_fusion_summary.csv"),
+  figuresSource: path.join(projectRoot, "outputs", "figures"),
+  notebooksSource: path.join(projectRoot, "notebooks"),
+  demoPresetsSource: path.join(projectRoot, "outputs", "reports", "demo_presets.json"),
+  patientMetricsSource: path.join(projectRoot, "outputs", "metrics", "breakhis_patient_level_metrics.csv"),
+  jointMetricsSource: path.join(projectRoot, "outputs", "metrics", "joint_model_comparison.csv"),
+  syntheticMetricsSource: path.join(projectRoot, "outputs", "metrics", "synthetic_fusion_summary.csv"),
   animationsDest: path.join(publicRoot, "animations"),
   figuresDest: path.join(publicRoot, "artifacts", "figures"),
   notebooksDest: path.join(publicRoot, "artifacts", "notebooks"),

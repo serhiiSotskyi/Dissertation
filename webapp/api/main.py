@@ -55,7 +55,7 @@ WISCONSIN_DATA_PATH = resolve_path(
 )
 DEMO_PRESETS_PATH = resolve_path(
     "DEMO_PRESETS_PATH",
-    PROJECT_ROOT / "outputs_v2" / "reports" / "demo_presets.json",
+    PROJECT_ROOT / "outputs" / "reports" / "demo_presets.json",
 )
 
 STANDARD_DISCLAIMER = (

@@ -17,7 +17,7 @@ RUN pip install --no-cache-dir --upgrade pip \
 COPY webapp/api ./webapp/api
 COPY dissertation_project/src ./dissertation_project/src
 COPY dissertation_project/notebook_Wisconsin ./dissertation_project/notebook_Wisconsin
-COPY dissertation_project/outputs_v2/reports/demo_presets.json ./dissertation_project/outputs_v2/reports/demo_presets.json
+COPY dissertation_project/outputs/reports/demo_presets.json ./dissertation_project/outputs/reports/demo_presets.json
 COPY dissertation_project/models/breakhis_resnet18_patient_level_clean.pth ./dissertation_project/models/breakhis_resnet18_patient_level_clean.pth
 
 WORKDIR /app/webapp/api
