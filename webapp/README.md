@@ -1,4 +1,4 @@
-# BreaScope AI Web App Workspace
+# Dissertation Project Web App Workspace
 
 This workspace contains:
 
