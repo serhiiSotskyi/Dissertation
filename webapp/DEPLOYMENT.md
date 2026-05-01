@@ -1,4 +1,4 @@
-# BreaScope AI Deployment
+# Dissertation Project Deployment
 
 ## Where to deploy
 
