@@ -29,7 +29,7 @@ Set:
 
 ```bash
 RAILWAY_DOCKERFILE_PATH=webapp/api/Dockerfile
-CORS_ALLOW_ORIGINS=https://<your-vercel-domain>
+CORS_ALLOW_ORIGINS=https://dissertation-nu.vercel.app
 BREAKHIS_CHECKPOINT_PATH=/app/dissertation_project/models/breakhis_resnet18_patient_level_clean.pth
 ```
 
@@ -38,7 +38,7 @@ The Dockerfile copies the clean checkpoint from `dissertation_project/models/bre
 After deploy, check:
 
 ```bash
-curl https://<your-railway-api-domain>/health
+curl https://dissertation-production-fce9.up.railway.app/health
 ```
 
 Expected status is `ok`. If it is `degraded`, the API started but one or more model artifacts are missing.
@@ -54,7 +54,7 @@ Create a Vercel project with:
 Set:
 
 ```bash
-API_BASE_URL=https://<your-railway-api-domain>
+API_BASE_URL=https://dissertation-production-fce9.up.railway.app
 ```
 
 Deploy, then open:

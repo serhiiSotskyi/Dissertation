@@ -13,6 +13,10 @@ This workspace contains:
 
 ## Local run
 
+Deployed frontend: https://dissertation-nu.vercel.app/
+
+Deployed API: https://dissertation-production-fce9.up.railway.app/
+
 ### API
 
 ```bash
@@ -48,7 +52,7 @@ Deploy this as two services:
    - Build command: `npm run build`
    - Output: Vercel detects the Next.js `.next` output automatically
    - Environment variable:
-     - `API_BASE_URL=https://<your-railway-api-domain>`
+     - `API_BASE_URL=https://dissertation-production-fce9.up.railway.app`
 
 2. **Inference API: Railway**
    - Project root/build context: repository root
@@ -56,7 +60,7 @@ Deploy this as two services:
    - Healthcheck path: `/health`
    - Environment variables:
      - `RAILWAY_DOCKERFILE_PATH=webapp/api/Dockerfile`
-     - `CORS_ALLOW_ORIGINS=https://<your-vercel-domain>`
+     - `CORS_ALLOW_ORIGINS=https://dissertation-nu.vercel.app`
      - `BREAKHIS_CHECKPOINT_PATH=/app/dissertation_project/models/breakhis_resnet18_patient_level_clean.pth`
 
 The API Docker build intentionally excludes the raw BreaKHis dataset. It copies only the Python service, inference code, tabular artifacts, demo preset manifest, and the clean BreaKHis checkpoint. With the Dockerfile as written, `dissertation_project/models/breakhis_resnet18_patient_level_clean.pth` must be present in the Docker build context. Local Docker/Railway uploads can use the existing local file; Git-based deploys should provide it through Git LFS or another tracked private build artifact.

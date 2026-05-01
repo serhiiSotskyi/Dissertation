@@ -20,6 +20,7 @@ venv/
 .env.local
 .env.*.local
 .codex/
+anaconda_projects/
 .graphify_detect.json
 graphify-out/
 **/graphify-out/
@@ -33,15 +34,13 @@ graphify-out/
 *.ckpt
 *.h5
 *.csv
-!dissertation_project/outputs_v2/reports/demo_preset_evidence.csv
+!dissertation_project/outputs/
+!dissertation_project/outputs/**
 *.zip
 *.tar
 *.gz
 *.tmp
 ~$*
 data/
-outputs/
 dissertation_project/data/
-dissertation_project/outputs/
 dissertation_project/models/
-dissertation_project/outputs_v2/reports/synthetic_pairs_*.csv
