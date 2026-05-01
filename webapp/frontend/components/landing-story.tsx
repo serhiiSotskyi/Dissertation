@@ -95,7 +95,7 @@ export function LandingStory({
 
       <header className="topbar">
         <div>
-          <span className="eyebrow">Project placeholder</span>
+          <span className="eyebrow">Dissertation Project</span>
           <p className="topbar-copy">Breast cancer classification research with image, tabular, and exploratory fusion testing.</p>
         </div>
         <nav className="topbar-nav">

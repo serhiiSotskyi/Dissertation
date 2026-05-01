@@ -15,7 +15,7 @@ const mono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Project placeholder",
+  title: "Dissertation Project",
   description: "Breast cancer classification research with image, tabular, and exploratory fusion testing.",
 };
 
